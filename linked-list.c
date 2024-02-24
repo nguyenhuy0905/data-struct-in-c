@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /// @brief Represents a node in a singly linked list
@@ -66,7 +67,7 @@ Node *add_node(char data[64], int position){
 }
 
 void remove_node(int position){
-    Node *remove_prev = head;
+    Node *remove_prev = pHead;
     Node *remove;
     // this will get the node BEFORE the node to be
     int i;
@@ -75,6 +76,7 @@ void remove_node(int position){
     }
     remove = remove_prev->next;
     remove_prev->next = remove->next;
+    if(position == 0) head = remove_prev->next;
     printf("Successfully removed node at index %d\n", i);
     free(remove);
     return;
@@ -112,13 +114,14 @@ void print_options(){
 
 int main(){
     int input = 1;    
+    char input_data[64];
+    int position = -1;
+
     while(input >= ADD_NODE && input < QUIT_PROGRAM){
         print_options();
         scanf(" %d", &input);
         switch(input){
             case ADD_NODE:
-                char input_data[64];
-                int position = -1;
                 
                 printf("Please input the value for the node (max length 64): ");
                 scanf(" %[^\n]%*c", input_data);
@@ -132,9 +135,25 @@ int main(){
                 }
 
                 add_node(input_data, position);
+                position = -1;
                 printf("Node with value \"%s\" has been added\n", input_data);
                 break;
+
             case REMOVE_NODE:
+            if(list_length == 0){
+                printf("No item in list!\n");
+                break;
+            }
+                while(position < 0 || position >= list_length){
+                    printf("Please input the position to be removed: ");
+                    scanf(" %d", &position);
+                    if(position < 0 || position > list_length - 1){
+                        printf("Skillissue. Give a value again\n");
+                    }
+                }
+
+                remove_node(position);
+                position = -1;
                 break;
             case PRINT_LIST:
                 print_list();
