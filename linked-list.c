@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 /// @brief Represents a node in a singly linked list
 typedef struct {
@@ -22,6 +23,7 @@ Node *add_node(char data[64], int position){
     // allocate memo for a node and check whether the allocation fucks up
     Node *new = (Node*)malloc(sizeof(Node));
 
+    // checking whether memory is correctly allocated
     if(new == NULL) {
         //printf("Error allocating memo\n");
         return NULL;
@@ -104,6 +106,7 @@ void print_list(){
     return;
 }
 
+/// @brief A list of input options corresponding to the print_options() function down here
 enum user_input_option{
     ADD_NODE = 1,
     REMOVE_NODE = 2,
@@ -119,53 +122,61 @@ void print_options(){
     printf("[4] Quit the program\n");
 }
 
-void prompt_add(char input_data[], int *position){
+/// @brief A list of action to be done after getting the position. Either add a node at that position, or remove one
+enum position_action{
+    REMOVE = 0,
+    ADD = 1
+};
 
+/// @brief Give a prompt corresponding to action to be taken and record the user-input position
+void get_position(int *position, int action){
+    while(*position < 0 || *position > list_length){
+        printf("Please input the position to %s: ", (action == 1) ? "add this node" : "remove a node");
+        scanf(" %d", position);
+        if(*position < 0 || *position > list_length){
+            printf("Skillissue. Give a value again\n");
+        }
+    }
+    return; 
+}
+
+void prompt_add(char input_data[], int *position){
+    printf("Please input the value for the node (max length 64): ");
+    scanf(" %[^\n]%*c", input_data);
+    get_position(position, ADD);
+    add_node(input_data, *position);
+    *position = -1;
+    return;
+}
+
+void prompt_remove(char input_data[], int *position){
+    if(list_length == 0){
+        printf("No item in list!\n");
+        return;
+    }
+    get_position(position, REMOVE);
+    remove_node(*position);
+    *position = -1;
+    return;
 }
 
 void get_user_input(int *input, char input_data[], int *position){
     print_options();
-        scanf(" %d", input);
-        switch(*input){
-            case ADD_NODE:
-                
-                printf("Please input the value for the node (max length 64): ");
-                scanf(" %[^\n]%*c", input_data);
+    scanf(" %d", input);
 
-                while(*position < 0 || *position > list_length){
-                    printf("Please input the position to add this node: ");
-                    scanf(" %d", position);
-                    if(*position < 0 || *position > list_length){
-                        printf("Skillissue. Give a value again\n");
-                    }
-                }
-
-                add_node(input_data, *position);
-                *position = -1;
-                break;
-
-            case REMOVE_NODE:
-            if(list_length == 0){
-                printf("No item in list!\n");
-                break;
-            }
-                while(*position < 0 || *position >= list_length){
-                    printf("Please input the position to be removed: ");
-                    scanf(" %d", position);
-                    if(*position < 0 || *position > list_length - 1){
-                        printf("Skillissue. Give a value again\n");
-                    }
-                }
-
-                remove_node(*position);
-                *position = -1;
-                break;
-            case PRINT_LIST:
-                print_list();
-                break;
-            case QUIT_PROGRAM:
-                return;
-        }
+    switch(*input){
+        case ADD_NODE:
+            prompt_add(input_data, position);      
+            break;
+        case REMOVE_NODE:
+            prompt_remove(input_data, position);            
+            break;
+        case PRINT_LIST:
+            print_list();
+            break;
+        case QUIT_PROGRAM:
+            return;
+    }
 }
 
 int main(){
