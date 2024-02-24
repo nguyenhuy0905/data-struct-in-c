@@ -9,9 +9,9 @@ typedef struct {
 } Node;
 /// @brief header node
 Node *head = NULL;
+/// @brief a pointer to the head node. Useful in certain situations, like adding a node to the head
 Node *pHead;
 
-/// @brief a pointer to the head node. Useful in certain situations, like adding a node to the head
 int list_length = 0;
 
 /// @brief Add a node at the specified position
