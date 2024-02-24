@@ -1,5 +1,5 @@
 > Disclaimer: FOR PERSONAL USE. Well actually, what use do I even have with this, other than playing around?
->Anyways, this is my aattempt to write data structures in C. 
+>Anyways, this is my attempt to write data structures in C. 
  ### Why not C++?
  - I don't know C++. And besides, C++ is already designed for this kind of stuff. How about we try something more,
 difficult? To be fair, I think C is actually simpler.
