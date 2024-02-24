@@ -23,7 +23,7 @@ Node *add_node(char data[64], int position){
     Node *new = (Node*)malloc(sizeof(Node));
 
     if(new == NULL) {
-        printf("Error allocating memo\n");
+        //printf("Error allocating memo\n");
         return NULL;
     }
     /*
@@ -43,7 +43,9 @@ Node *add_node(char data[64], int position){
         pHead->next = head;
 
         list_length++;
-        printf("Added new head\n");
+        //printf("Added new head\n");
+
+        printf("Node with value \"%s\" has been added\n", data);
         return new;
     }
 
@@ -52,7 +54,8 @@ Node *add_node(char data[64], int position){
         head = new;
         list_length++;
         pHead->next = head;
-        printf("Added new head again\n");
+        //printf("Added new head again\n");
+        printf("Node with value \"%s\" has been added\n", data);
         return new;
     }
     
@@ -62,7 +65,8 @@ Node *add_node(char data[64], int position){
     new->next = current->next;
     current->next = new;
     list_length++;
-    printf("Inserted new value\n");
+    //printf("Inserted new value\n");
+    printf("Node with value \"%s\" has been added\n", data);
     return new;
 }
 
@@ -136,7 +140,6 @@ int main(){
 
                 add_node(input_data, position);
                 position = -1;
-                printf("Node with value \"%s\" has been added\n", input_data);
                 break;
 
             case REMOVE_NODE:
