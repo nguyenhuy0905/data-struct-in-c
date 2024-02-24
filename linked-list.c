@@ -70,6 +70,8 @@ Node *add_node(char data[64], int position){
     return new;
 }
 
+/// @brief remove node at specified position
+/// @param position the position to remove the node
 void remove_node(int position){
     Node *remove_prev = pHead;
     Node *remove;
@@ -86,6 +88,7 @@ void remove_node(int position){
     return;
 }
 
+/// @brief print all the values, from head to tail, of the list
 void print_list(){
     Node *curr = head;
 
@@ -116,30 +119,29 @@ void print_options(){
     printf("[4] Quit the program\n");
 }
 
-int main(){
-    int input = 1;    
-    char input_data[64];
-    int position = -1;
+void prompt_add(char input_data[], int *position){
 
-    while(input >= ADD_NODE && input < QUIT_PROGRAM){
-        print_options();
-        scanf(" %d", &input);
-        switch(input){
+}
+
+void get_user_input(int *input, char input_data[], int *position){
+    print_options();
+        scanf(" %d", input);
+        switch(*input){
             case ADD_NODE:
                 
                 printf("Please input the value for the node (max length 64): ");
                 scanf(" %[^\n]%*c", input_data);
 
-                while(position < 0 || position > list_length){
+                while(*position < 0 || *position > list_length){
                     printf("Please input the position to add this node: ");
-                    scanf(" %d", &position);
-                    if(position < 0 || position > list_length){
+                    scanf(" %d", position);
+                    if(*position < 0 || *position > list_length){
                         printf("Skillissue. Give a value again\n");
                     }
                 }
 
-                add_node(input_data, position);
-                position = -1;
+                add_node(input_data, *position);
+                *position = -1;
                 break;
 
             case REMOVE_NODE:
@@ -147,23 +149,32 @@ int main(){
                 printf("No item in list!\n");
                 break;
             }
-                while(position < 0 || position >= list_length){
+                while(*position < 0 || *position >= list_length){
                     printf("Please input the position to be removed: ");
-                    scanf(" %d", &position);
-                    if(position < 0 || position > list_length - 1){
+                    scanf(" %d", position);
+                    if(*position < 0 || *position > list_length - 1){
                         printf("Skillissue. Give a value again\n");
                     }
                 }
 
-                remove_node(position);
-                position = -1;
+                remove_node(*position);
+                *position = -1;
                 break;
             case PRINT_LIST:
                 print_list();
                 break;
             case QUIT_PROGRAM:
-                break;
+                return;
         }
+}
+
+int main(){
+    int input = 1;    
+    char input_data[64];
+    int position = -1;
+
+    while(input >= ADD_NODE && input < QUIT_PROGRAM){
+        get_user_input(&input, input_data, &position); 
     }
     printf("Closing the program\n");
     free(pHead);
