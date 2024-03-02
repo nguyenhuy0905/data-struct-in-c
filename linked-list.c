@@ -30,7 +30,7 @@ Node *add_node(char data[64], int position){
     /*
     Note: new->data = data doesn't work. The text editor will shout at me.
     if input param is char *data (aka, modifiable), which itself is input_data
-    in line 120, then every time input_data is changed, every-single-value in the
+    in the main function, then every time input_data is changed, every-single-value in the
     list gets changed also.
     */
     strcpy(new->data, data);
