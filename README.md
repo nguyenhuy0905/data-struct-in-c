@@ -6,10 +6,11 @@ difficult? To be fair, I think C is actually simpler.
 
 ### What have you written?
 - Linked list.
+- Queue.
 
 ### What are you planning to write?
 - Resizable array.
-- Stack, (priority) queue (which basically is linked list)
+- Stack, priority queue (which basically is linked list)
 - Hash (map, set)
 - Tree (BST, Red-Black)
 - Heap (maybe)
