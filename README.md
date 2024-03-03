@@ -10,7 +10,7 @@ difficult? To be fair, I think C is actually simpler.
 
 ### What are you planning to write?
 - Resizable array.
-- Stack, priority queue (which basically is linked list)
+- Stack, priority queue (which basically are linked list)
 - Hash (map, set)
 - Tree (BST, Red-Black)
 - Heap (maybe)
