@@ -18,13 +18,26 @@ TreeNode *root = NULL;
 
 int length = 0;
 
+/*
+ * THIS METHOD SHOULD NOT BE CALLED BY THE CLIENT
+ *
+ * (Recursively) searches for a node with specified data in the tree
+ *
+ * Parameters:
+ * - data: the string to look for
+ * - subtree_node: for recursive search calls
+ *
+ * Return:
+ * - The node with specified data if such node exists
+ * - NULL otherwise
+ * */
 TreeNode *search_subtree_for(char data[], TreeNode *subtree_node) {
-  if (subtree_node == NULL){
+  if (subtree_node == NULL) {
     printf("Node \"%s\" not found!\n", data);
     return NULL;
   }
   int cmp_result = strcmp(data, subtree_node->data);
-  if (cmp_result == 0){
+  if (cmp_result == 0) {
     printf("Node \"%s\" found!\n", data);
     return subtree_node;
   }
@@ -34,37 +47,63 @@ TreeNode *search_subtree_for(char data[], TreeNode *subtree_node) {
   return search_subtree_for(data, subtree_node->right);
 }
 
-TreeNode *search_for(char data[]){
-  return search_subtree_for(data, root);
-}
+/*
+ * Search for a tree node which contains the specified string
+ *
+ * Parameters:
+ * - char data[]: the string to look for
+ *
+ * Returns:
+ * - the tree node with the data specified if such a node exists
+ * - NULL otherwise
+ * */
+TreeNode *search_for(char data[]) { return search_subtree_for(data, root); }
 
-void insert(TreeNode *node, TreeNode *curr) {
+/*
+ * THIS METHOD SHOULD NOT BE CALLED BY THE CLIENT
+ *
+ * Inserts the specified node into the tree
+ *
+ * Parameters:
+ * - node: The node to be inserted
+ * - curr: For recursive calls
+ * */
+TreeNode *insert(TreeNode *node, TreeNode *curr) {
   // at the point when this func is called, both the pointers passed in aren't
   // null (if only the client would always be obedient)
   if (strcmp(node->data, curr->data) == 0) {
     printf("Error, this entry already exists inside the tree\n");
-    return;
+    return NULL;
   }
   if (strcmp(node->data, curr->data) <= 0) {
     if (curr->left == NULL) {
       curr->left = node;
       node->parent = curr;
       printf("Node inserted to left\n");
-      return;
+      return node;
     }
     insert(node, curr->left);
-    return;
+    return node;
   }
   if (curr->right == NULL) {
     curr->right = node;
     node->parent = curr;
     printf("Node inserted to right\n");
-    return;
+    return node;
   }
   insert(node, curr->right);
-  return;
+  return node;
 }
 
+/*
+ * Adds a node with the specified data into the tree
+ *
+ * Parameters:
+ * - data: the data to be added into the tree
+ *
+ * Return:
+ * - The tree node just created
+ * */
 TreeNode *add_node(char data[]) {
   TreeNode *new = (TreeNode *)malloc(sizeof(TreeNode));
   if (new == NULL) {
@@ -78,11 +117,9 @@ TreeNode *add_node(char data[]) {
 
   if (root == NULL) {
     root = new;
-  } else
-    insert(new, root);
-
+  }
   length++;
-  return new;
+  return insert(new, root);
 }
 
 /*
@@ -159,9 +196,18 @@ void remove_node(char data[]) {
   length--;
 }
 
+/*
+ * THIS METHOD SHOULD NOT BE CALLED BY THE CLIENT
+ *
+ * Print the tree pre-ordered.
+ *
+ * Parameters:
+ * - current: For recursive calls
+ * - tabs: the number of indents to add before each print content
+ * */
 void preorder(TreeNode *current, int tabs) {
   char tab[tabs + 1];
-  for(int i = 0; i < tabs; i++){
+  for (int i = 0; i < tabs; i++) {
     tab[i] = '\t';
   }
   tab[tabs] = '\0';
@@ -171,21 +217,25 @@ void preorder(TreeNode *current, int tabs) {
   }
   printf("%s%s\n", tab, current->data);
   printf("%sLeft:\n", tab);
-  preorder(current->left,tabs + 1);
+  preorder(current->left, tabs + 1);
   printf("%sRight:\n", tab);
-  preorder(current->right,tabs + 1);
+  preorder(current->right, tabs + 1);
 }
 
+/*
+ * Print the tree pre-ordered
+ * */
 void preorder_print() {
   if (root == NULL) {
     printf("Tree is empty!\n");
     return;
   }
   printf("Pre-order tree:\n");
-  preorder(root,0);
+  preorder(root, 0);
 }
 
 int main(int argc, char *argv[]) {
+  // let's make a sample
   add_node("I just wanna tell you how I\'m feeling");
   add_node("Don\'t tell me you\'re too blind to see");
   add_node("Never gonna give you up");
@@ -195,10 +245,10 @@ int main(int argc, char *argv[]) {
   add_node("Never gonna say goodbye");
   add_node("Never gonna tell a lie and desert you");
   printf("\n");
-  
+
   remove_node("Rick Astley");
   printf("\n");
-  
+
   preorder_print();
   remove_node("Never gonna let you down");
   printf("\n");
