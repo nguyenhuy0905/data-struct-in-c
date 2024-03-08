@@ -11,7 +11,7 @@ struct TreeNode {
   TreeNode *parent;
   TreeNode *left;
   TreeNode *right;
-  char *data;
+  const char *data;
 };
 
 TreeNode *root = NULL;
@@ -141,9 +141,11 @@ void remove_node(char data[]) {
   /*
    * 'l' means the node to be removed is the left child of its parent
    * 'r' means it's right
+   * 'n' (none) means the node is root (so it has no parent)
    */
-  char parent_side =
-      (strcmp(remove->data, remove->parent->data) < 0) ? 'l' : 'r';
+  char parent_side;
+  if(remove != root) parent_side = (strcmp(remove->data, remove->parent->data) < 0) ? 'l' : 'r';
+  else parent_side = 'n';
   bool left_exist = (remove->left != NULL);
   bool right_exist = (remove->right != NULL);
 
@@ -151,7 +153,7 @@ void remove_node(char data[]) {
   if (!(left_exist || right_exist)) {
     if (parent_side == 'l')
       remove->parent->left = NULL;
-    else
+    else if(parent_side == 'r')
       remove->parent->right = NULL;
     free(remove);
   }
@@ -160,9 +162,13 @@ void remove_node(char data[]) {
     if (parent_side == 'l') {
       remove->parent->left = remove->left;
       remove->left->parent = remove->parent;
-    } else {
+    } else if(parent_side == 'r'){
       remove->parent->right = remove->left;
       remove->left->parent = remove->parent;
+    }
+    else{
+      root->left->parent = NULL;
+      root = root->left;
     }
     free(remove);
   }
@@ -171,9 +177,13 @@ void remove_node(char data[]) {
     if (parent_side == 'l') {
       remove->parent->left = remove->right;
       remove->left->parent = remove->parent;
-    } else {
+    } else if(parent_side == 'r'){
       remove->parent->right = remove->right;
       remove->right->parent = remove->parent;
+    }
+    else{
+      root->right->parent = NULL;
+      root = root->right;
     }
     free(remove);
   }
@@ -184,15 +194,13 @@ void remove_node(char data[]) {
     while (next->left != NULL) {
       next = next->left;
     }
-    char next_data[strlen(next->data)];
+    char *next_data;
     strcpy(next_data, next->data);
-    // do a left-removal of the next node
-    next->parent->left = NULL;
-    free(next);
+    remove_node(next_data);
     // overwrite the data of the should-be removed node
     remove->data = next_data;
   }
-  printf("Removed node %s\n", data);
+  printf("Removed node \"%s\"\n", data);
   length--;
 }
 
@@ -251,6 +259,10 @@ int main(int argc, char *argv[]) {
 
   preorder_print();
   remove_node("Never gonna let you down");
+  printf("\n");
+
+  // rm -rf
+  remove_node("I just wanna tell you how I\'m feeling");
   printf("\n");
 
   preorder_print();
