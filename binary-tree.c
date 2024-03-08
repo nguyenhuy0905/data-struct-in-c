@@ -29,12 +29,8 @@ TreeNode *search_subtree_for(char data[], TreeNode *subtree_node) {
     return subtree_node;
   }
   if (cmp_result < 0) {
-    if (subtree_node->left == NULL)
-      return NULL;
     return search_subtree_for(data, subtree_node->left);
   }
-  if (subtree_node->right == NULL)
-    return NULL;
   return search_subtree_for(data, subtree_node->right);
 }
 
