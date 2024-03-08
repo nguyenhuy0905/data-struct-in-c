@@ -19,11 +19,15 @@ TreeNode *root = NULL;
 int length = 0;
 
 TreeNode *search_subtree_for(char data[], TreeNode *subtree_node) {
-  if (subtree_node == NULL)
+  if (subtree_node == NULL){
+    printf("Node \"%s\" not found!\n", data);
     return NULL;
+  }
   int cmp_result = strcmp(data, subtree_node->data);
-  if (cmp_result == 0)
+  if (cmp_result == 0){
+    printf("Node \"%s\" found!\n", data);
     return subtree_node;
+  }
   if (cmp_result < 0) {
     if (subtree_node->left == NULL)
       return NULL;
@@ -32,6 +36,10 @@ TreeNode *search_subtree_for(char data[], TreeNode *subtree_node) {
   if (subtree_node->right == NULL)
     return NULL;
   return search_subtree_for(data, subtree_node->right);
+}
+
+TreeNode *search_for(char data[]){
+  return search_subtree_for(data, root);
 }
 
 void insert(TreeNode *node, TreeNode *curr) {
@@ -190,9 +198,19 @@ int main(int argc, char *argv[]) {
   add_node("Never gonna make you cry");
   add_node("Never gonna say goodbye");
   add_node("Never gonna tell a lie and desert you");
+  printf("\n");
+  
   remove_node("Rick Astley");
+  printf("\n");
+  
   preorder_print();
   remove_node("Never gonna let you down");
+  printf("\n");
+
   preorder_print();
+  printf("\n");
+
+  search_for("Never gonna give you up");
+  search_for("Rick Astley");
   return EXIT_SUCCESS;
 }
