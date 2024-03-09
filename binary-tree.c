@@ -11,7 +11,7 @@ struct TreeNode {
   TreeNode *parent;
   TreeNode *left;
   TreeNode *right;
-  char data[128];
+  char *data[1];
 };
 
 TreeNode *root = NULL;
@@ -36,7 +36,7 @@ TreeNode *search_subtree_for(char data[], TreeNode *subtree_node) {
     printf("Node \"%s\" not found!\n", data);
     return NULL;
   }
-  int cmp_result = strcmp(data, subtree_node->data);
+  int cmp_result = strcmp(data, subtree_node->data[0]);
   if (cmp_result == 0) {
     printf("Node \"%s\" found!\n", data);
     return subtree_node;
@@ -80,11 +80,11 @@ void balance_tree(){
 TreeNode *insert(TreeNode *node, TreeNode *curr) {
   // at the point when this func is called, both the pointers passed in aren't
   // null (if only the client would always be obedient)
-  if (strcmp(node->data, curr->data) == 0) {
+  if (strcmp(node->data[0], curr->data[0]) == 0) {
     printf("Error, this entry already exists inside the tree\n");
     return NULL;
   }
-  if (strcmp(node->data, curr->data) < 0) {
+  if (strcmp(node->data[0], curr->data[0]) < 0) {
     if (curr->left == NULL) {
       curr->left = node;
       node->parent = curr;
@@ -117,7 +117,8 @@ TreeNode *add_node(char data[]) {
     printf("Memo allocation error\n");
     return NULL;
   }
-  strcpy(new->data, data);
+  new->data[0] = malloc(sizeof(char)*(strlen(data)+1));
+  strcpy(new->data[0], data);
   new->parent = NULL;
   new->left = NULL;
   new->right = NULL;
@@ -151,7 +152,7 @@ void remove_node(char data[]) {
    * 'n' (none) means the node is root (so it has no parent)
    */
   char parent_side;
-  if(remove != root) parent_side = (strcmp(remove->data, remove->parent->data) < 0) ? 'l' : 'r';
+  if(remove != root) parent_side = (strcmp(remove->data[0], remove->parent->data[0]) < 0) ? 'l' : 'r';
   else parent_side = 'n';
   bool left_exist = (remove->left != NULL);
   bool right_exist = (remove->right != NULL);
@@ -205,10 +206,10 @@ void remove_node(char data[]) {
       next = next->left;
     }
     char next_data[strlen(data)];
-    strcpy(next_data, next->data);
+    strcpy(next_data, next->data[0]);
     remove_node(next_data);
     // overwrite the data of the should-be removed node
-    strcpy(remove->data, next_data);
+    strcpy(remove->data[0], next_data);
   }
   printf("Removed node \"%s\"\n", data);
   length--;
@@ -233,7 +234,7 @@ void preorder(TreeNode *current, int tabs) {
     printf("%sNULL\n", tab);
     return;
   }
-  printf("%s%s\n", tab, current->data);
+  printf("%s%s\n", tab, current->data[0]);
   printf("%sLeft:\n", tab);
   preorder(current->left, tabs + 1);
   printf("%sRight:\n", tab);
