@@ -125,6 +125,8 @@ TreeNode *add_node(char data[]) {
 
   if (root == NULL) {
     root = new;
+    length++;
+    return new;
   }
   length++;
   return insert(new, root);
@@ -255,8 +257,10 @@ void preorder_print() {
 
 int main(int argc, char *argv[]) {
   // let's make a sample
-  add_node("I just wanna tell you how I\'m feeling");
-  add_node("Don\'t tell me you\'re too blind to see");
+  char *str = "I just wanna tell you how I\'m feeling";
+  add_node(str);
+  str = "Don\'t tell me you\'re too blind to see";
+  add_node(str);
   add_node("Never gonna give you up");
   add_node("Never gonna let you down");
   add_node("Never gonna run around and desert you");
