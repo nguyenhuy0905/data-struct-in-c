@@ -11,7 +11,7 @@ struct TreeNode {
   TreeNode *parent;
   TreeNode *left;
   TreeNode *right;
-  const char *data;
+  char data[128];
 };
 
 TreeNode *root = NULL;
@@ -62,6 +62,15 @@ TreeNode *search_for(char data[]) { return search_subtree_for(data, root); }
 /*
  * THIS METHOD SHOULD NOT BE CALLED BY THE CLIENT
  *
+ * Balances the tree if needed
+ * */
+void balance_tree(){
+
+}
+
+/*
+ * THIS METHOD SHOULD NOT BE CALLED BY THE CLIENT
+ *
  * Inserts the specified node into the tree
  *
  * Parameters:
@@ -75,15 +84,14 @@ TreeNode *insert(TreeNode *node, TreeNode *curr) {
     printf("Error, this entry already exists inside the tree\n");
     return NULL;
   }
-  if (strcmp(node->data, curr->data) <= 0) {
+  if (strcmp(node->data, curr->data) < 0) {
     if (curr->left == NULL) {
       curr->left = node;
       node->parent = curr;
       printf("Node inserted to left\n");
       return node;
     }
-    insert(node, curr->left);
-    return node;
+    return insert(node, curr->left);
   }
   if (curr->right == NULL) {
     curr->right = node;
@@ -91,8 +99,7 @@ TreeNode *insert(TreeNode *node, TreeNode *curr) {
     printf("Node inserted to right\n");
     return node;
   }
-  insert(node, curr->right);
-  return node;
+  return insert(node, curr->right);
 }
 
 /*
@@ -110,7 +117,7 @@ TreeNode *add_node(char data[]) {
     printf("Memo allocation error\n");
     return NULL;
   }
-  new->data = data;
+  strcpy(new->data, data);
   new->parent = NULL;
   new->left = NULL;
   new->right = NULL;
@@ -150,11 +157,14 @@ void remove_node(char data[]) {
   bool right_exist = (remove->right != NULL);
 
   // node to remove is a leaf
-  if (!(left_exist || right_exist)) {
+  if (!left_exist && !right_exist) {
     if (parent_side == 'l')
       remove->parent->left = NULL;
     else if(parent_side == 'r')
       remove->parent->right = NULL;
+    else{
+      root = NULL;
+    }
     free(remove);
   }
   // has a left child but no right child
@@ -194,11 +204,11 @@ void remove_node(char data[]) {
     while (next->left != NULL) {
       next = next->left;
     }
-    char *next_data;
+    char next_data[strlen(data)];
     strcpy(next_data, next->data);
     remove_node(next_data);
     // overwrite the data of the should-be removed node
-    remove->data = next_data;
+    strcpy(remove->data, next_data);
   }
   printf("Removed node \"%s\"\n", data);
   length--;
@@ -257,8 +267,8 @@ int main(int argc, char *argv[]) {
   remove_node("Rick Astley");
   printf("\n");
 
-  preorder_print();
   remove_node("Never gonna let you down");
+  preorder_print();
   printf("\n");
 
   // rm -rf
@@ -268,7 +278,14 @@ int main(int argc, char *argv[]) {
   preorder_print();
   printf("\n");
 
-  search_for("Never gonna give you up");
-  search_for("Rick Astley");
+  // search_for("Never gonna give you up");
+  // search_for("Rick Astley");
+  // printf("\n");
+
+  // rm -rf again
+  remove_node("Never gonna give you up");
+  // remove_node("Never gonna make you cry");
+  preorder_print();
+
   return EXIT_SUCCESS;
 }
