@@ -117,8 +117,8 @@ TreeNode *add_node(char data[]) {
     printf("Memo allocation error\n");
     return NULL;
   }
-  new->data[0] = malloc(sizeof(char)*(strlen(data)+1));
-  strcpy(new->data[0], data);
+  
+  new->data[0] = data;
   new->parent = NULL;
   new->left = NULL;
   new->right = NULL;
@@ -209,7 +209,7 @@ void remove_node(char data[]) {
     strcpy(next_data, next->data[0]);
     remove_node(next_data);
     // overwrite the data of the should-be removed node
-    strcpy(remove->data[0], next_data);
+    remove->data[0] = next->data[0];
   }
   printf("Removed node \"%s\"\n", data);
   length--;
@@ -286,6 +286,9 @@ int main(int argc, char *argv[]) {
   // rm -rf again
   remove_node("Never gonna give you up");
   // remove_node("Never gonna make you cry");
+  preorder_print();
+
+  remove_node("Never gonna make you cry");
   preorder_print();
 
   return EXIT_SUCCESS;
