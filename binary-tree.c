@@ -82,8 +82,7 @@ void balance_left(TreeNode *node){
   if(node->left->left != NULL){
     // left-left imbalance with extra steps
     if(node->left->right != NULL){
-      
-      return;
+      balance_left(node);
     }
     // left-left imbalance
     return;
@@ -94,7 +93,7 @@ void balance_right(TreeNode *node){
   if(node->right->right != NULL){
     // right-right imbalance with extra steps
     if(node->right->right != NULL){
-      return;
+      balance_right(node);
     }
     // right-right imbalance
     return;
