@@ -60,12 +60,64 @@ TreeNode *search_subtree_for(char data[], TreeNode *subtree_node) {
 TreeNode *search_for(char data[]) { return search_subtree_for(data, root); }
 
 /*
+ * Get the depth of the tree node
+ *
+ * Parameters:
+ * - node: the node to calculate depth
+ *
+ * Return:
+ * - The depth of that node
+ * */
+int depth(TreeNode *node){
+  if(node->left == NULL && node->right == NULL)
+    return 0;
+  if(node->left == NULL) return 1 + depth(node->right);
+  if(node->right == NULL) return 1 + depth(node->left);
+  int left_depth = 1 + depth(node->left);
+  int right_depth = 1 + depth(node->right);
+  return (left_depth >= right_depth) ? left_depth : right_depth;
+}  
+
+void balance_left(TreeNode *node){
+  if(node->left->left != NULL){
+    // left-left imbalance with extra steps
+    if(node->left->right != NULL){
+      
+      return;
+    }
+    // left-left imbalance
+    return;
+  } 
+}
+
+void balance_right(TreeNode *node){
+  if(node->right->right != NULL){
+    // right-right imbalance with extra steps
+    if(node->right->right != NULL){
+      return;
+    }
+    // right-right imbalance
+    return;
+  }
+}
+
+/*
  * THIS METHOD SHOULD NOT BE CALLED BY THE CLIENT
  *
  * Balances the tree if needed
  * */
-void balance_tree(){
-
+void balance_tree(TreeNode *node){
+  int diff = depth(node->left) - depth(node->right); 
+  // nothing cool here
+  if(-1 <= diff && diff <= 1) return;
+  // too many right nodes
+  if(diff < -1){
+    balance_right(node);
+  }
+  // too many left nodes
+  else{
+    balance_left(node);
+  }
 }
 
 /*
