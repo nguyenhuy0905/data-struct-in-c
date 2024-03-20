@@ -85,6 +85,9 @@ void balance_left(TreeNode *node){
       balance_left(node);
     }
     // left-left imbalance
+    // pivot is node->left
+    node->parent->left = node->left;
+    node->left->parent = node->parent;
     return;
   } 
 }
