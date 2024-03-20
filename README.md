@@ -4,6 +4,9 @@
  - I don't know C++. And besides, C++ is already designed for this kind of stuff. How about we try something more,
 difficult? To be fair, I think C is actually simpler.
 
+### NOTE:
+- Caching nightmare ahead. Especially the linked list. It literally just stores pointers to something on the heap.
+
 ### What have you written?
 - Linked list.
 - Queue.
