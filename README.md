@@ -20,5 +20,4 @@ difficult? To be fair, I think C is actually simpler.
 - Graph (undirected, directed, unweighted, weighted)
 
 ### NOTE
-- Again, deprecated because of my horrible code-writing practice.
-- But to be fair, this is to be expected. It's some of my very first things to do in C.
+- Second attempt, after I have learned, stuff.
