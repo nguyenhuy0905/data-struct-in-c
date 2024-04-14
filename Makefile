@@ -1,38 +1,22 @@
 CC := clang
 DEBUG := -O0 --debug
 PROD := -O2
+MODE := $(PROD)
 
-SRC := src
-TEST := test
-LIB := lib
-HEADER := src/header
-OBJ := bin/obj
-BIN := bin
+SRCS := $(wildcard ./src/*.c)
+LIBS := $(patsubst ./src/%.c,./lib/lib%.so,$(SRCS))
 
-SRC_FILES := $(wildcard src/*.c)
-LDD_FILES := $(patsubst $(SRC)/%.c,$(LIB)/lib%.so,$(SRC_FILES))
+LD_LIB_PATH := LD_LIBRARY_PATH="./lib"
 
-OPTS := -Wno-unused-command-line-argument
+all: $(LIBS)
+	@echo $(SRCS)
+	@echo $(LIBS)
 
-all: $(LDD_FILES)
+$(LIBS): ./lib/lib%.so: ./src/%.c:
+	$(CC) -o $@ $< -shared -fPIC -I./src/header/ $(MODE)
 
-$(LDD_FILES): $(LIB)/lib%.so: $(SRC)/%.c
-	$(CC) -o $@ $< -fpic -shared
+.PHONY: check
 
-.PHONY: test
-
-TEST_FILE ?=
-test:
-	make -f test/Makefile $(TEST_FILE)
-
-.PHONY: var-test
-# use this to check if my Makefile is doing alright
-var-test:
-	@echo "Compiler is $(CC)"
-	@echo "Sources: $(SRC_FILES)"
-	@echo "Shared objects: $(LDD_FILES)"
-
-.PHONY: clean
-
-clean:
-	rm -f $(LDD_FILES)
+check:
+	@echo $(SRCS)
+	@echo $(LIBS)

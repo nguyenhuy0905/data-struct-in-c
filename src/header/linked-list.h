@@ -1,8 +1,6 @@
 #ifndef _LINKED_LIST_H_
 #define _LINKED_LIST_H_
 
-#include "iterator.h"
-
 typedef struct _linked_list linked_list;
 
 typedef struct _node node;
@@ -18,8 +16,5 @@ node *linked_list_insert(linked_list *self, int value, int position);
 int linked_list_remove(linked_list *self, node index);
 
 unsigned int linked_list_get_length(linked_list *self);
-
-void linked_list_iterate(linked_list *self, void (*iterate_action)(void **),
-                         void **args);
 
 #endif // _LINKED_LIST_H_
