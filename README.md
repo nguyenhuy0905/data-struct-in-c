@@ -19,6 +19,7 @@ cd ./data-struct-in-c
 make setup && make 
 ```
 - Compile a test executable: __COMING SOON__
+- Run a test executable: __COMING SOON__
 - For now you can manually do like so:
 ```
 # make sure you're at the directory of the Makefile
@@ -27,7 +28,6 @@ clang -o ./bin/obj/libtest-linked-list.so -shared -fPIC --debug ./test/test-link
 clang -o ./bin/test -I./src/header/ -L./lib/ -L./bin/obj/ -llinked-list -ltest-linked-list --debug 
 LD_LIBRARY_PATH=./lib/:./bin/obj/ ./bin/test
 ```
-- Run a test executable: __COMING SOON__
 ### What have you written?
 - Linked list.
 - Queue.
