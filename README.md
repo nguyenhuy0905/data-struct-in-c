@@ -18,8 +18,13 @@ cd ./data-struct-in-c
 # add the necessary directories first, then compile the source code into shared libraries-c
 make setup && make 
 ```
-- Compile a test executable: __COMING SOON__
-- Run a test executable: __COMING SOON__
+- Compile and run a test executable:
+```
+# make sure you're at the directory of the Makefile
+make test TEST=[data-structure-to-test]
+# so, to run a test on linked list, for example
+make test TEST=linked-list
+```
 - For now you can manually do like so:
 ```
 # make sure you're at the directory of the Makefile
@@ -28,6 +33,22 @@ clang -o ./bin/obj/libtest-linked-list.so -shared -fPIC --debug ./test/test-link
 clang -o ./bin/test -I./src/header/ -L./lib/ -L./bin/obj/ -llinked-list -ltest-linked-list --debug 
 LD_LIBRARY_PATH=./lib/:./bin/obj/ ./bin/test
 ```
+### Writing a test file
+- To automate the process, please follow the following rules:
+    - Put the test file inside the `test` directory
+    - Name it as `test-[data-structure-to-test].c`
+    - So, for example, to test the linked list, name as `test-linked-list.c`
+    - Write the file with at least the following:
+    ```
+    #include "../src/header/[data-structure-to-test].h"
+    #include <stdlib.h>
+
+    int main(int argc, char *argv[]){
+        // your tests go here
+
+        return EXIT_SUCCESS;
+    }
+    ```
 ### What have you written?
 
 ### What are you planning to write?
@@ -43,8 +64,8 @@ LD_LIBRARY_PATH=./lib/:./bin/obj/ ./bin/test
 ---
 ### PLANS
 - [ ] Implement linked list **on the way**
-- [ ] Write `MakeTest.mk` to compile test files into executables
-- [ ] Modify the original `Makefile` to account for the `MakeTest.mk` file
+- [x] Write `MakeTest.mk` to compile test files into executables
+- [x] Modify the original `Makefile` to account for the `MakeTest.mk` file
 - [ ] Implement stack and queue
 - [ ] Implement binary tree
 - [ ] Implement AVL tree
