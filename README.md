@@ -29,8 +29,6 @@ clang -o ./bin/test -I./src/header/ -L./lib/ -L./bin/obj/ -llinked-list -ltest-l
 LD_LIBRARY_PATH=./lib/:./bin/obj/ ./bin/test
 ```
 ### What have you written?
-- Linked list.
-- Queue.
 
 ### What are you planning to write?
 - Resizable array.
