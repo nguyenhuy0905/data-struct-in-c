@@ -6,7 +6,6 @@ LIB_DIR := ../lib/
 OBJ_DIR := ../bin/obj/
 BUILD_DIR := ../bin/
 HEADER_DIR := ../src/header/
-LD_LIB_PATH := LD_LIBRARY_PATH=$(LIB_DIR)
 
 # binaries and source files
 TEST_SRCS := $(wildcard ./test-*.c)
@@ -21,12 +20,12 @@ all: run
 run: $(BUILD_DIR)test-$(TEST)
 	@echo "===== TEST ====="
 	@echo ""
-	$(LD_LIB_PATH) $^
+	$^
 	@echo ""
 	@echo "===== TEST ====="
 	
 $(BUILD_DIR)test-$(TEST): ./test-$(TEST).c $(LIB_DIR)lib$(TEST).so
-	$(CC) -o $@ $< -L$(LIB_DIR) $(LIB_INCL)
+	$(CC) -o $@ $< -L$(LIB_DIR) $(LIB_INCL) -rpath $(LIB_DIR)
 
 $(LIB_DIR)lib$(TEST).so:
 	cd .. && make
