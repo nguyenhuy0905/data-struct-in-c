@@ -4,15 +4,15 @@
 
 /* private. Client code only has access to the struct linked_list
  * and none of these instance variables*/
-struct _linked_list{
-  node *head; 
+struct _linked_list {
+  node *head;
   node *tail;
   unsigned int length;
 };
 
 /* private. Client code only has access to the struct node
  * and none of these instance variables*/
-struct _node{
+struct _node {
   node *next;
   int data;
 };
@@ -23,10 +23,10 @@ struct _node{
 /**
  * @brief Free all node instances stored inside the linked list
  *
- * @param self 
+ * @param self
  * @return the next node to be removed, or NULL if all nodes have been removed
  */
-node *_free_node(node *self){
+node *_node_free(node *self) {
   node *next = self->next;
   free(self);
   // in case someone accidentally access the node after free
@@ -35,14 +35,28 @@ node *_free_node(node *self){
 }
 
 /* @brief: utility function to create a new node */
-node *_node_new(int data){
-  node *new = (node*)malloc(sizeof(node));
+node *_node_new(int data) {
+  node *new = (node *)malloc(sizeof(node));
 
-  if(new == NULL){
+  if (new == NULL) {
     printf("Error: memory allocation error. Maybe you ran out of memory?\n");
     exit(1);
   }
   return new;
+}
+
+node *_node_get(linked_list *self, int index) {
+  if (self->length <= index) {
+    printf("Error, accessing memory out of bounds\nMaximum %d, accessing %d\n",
+           self->length - 1, index);
+    exit(1);
+  }
+  node *ret = self->head;
+  while (index > 0) {
+    ret = ret->next;
+    index--;
+  }
+  return ret;
 }
 
 /* linked list operations */
@@ -50,7 +64,7 @@ node *_node_new(int data){
 /**
  * @brief Assign default values for the newly made list
  */
-void _linked_list_init(linked_list *self){
+void _linked_list_init(linked_list *self) {
   self->head = NULL;
   self->tail = NULL;
   self->length = 0;
@@ -58,10 +72,10 @@ void _linked_list_init(linked_list *self){
 
 /* public methods */
 
-linked_list *linked_list_new(){
-  linked_list *new = (linked_list*)malloc(sizeof(linked_list));
+linked_list *linked_list_new() {
+  linked_list *new = (linked_list *)malloc(sizeof(linked_list));
   // this should never happen unless you have no big enough memory chunk left
-  if(new == NULL){
+  if (new == NULL) {
     printf("Error: memory allocation error. Maybe you ran out of memory?\n");
     exit(1);
   }
@@ -70,25 +84,80 @@ linked_list *linked_list_new(){
   return new;
 }
 
-void linked_list_free(linked_list *self){
-  node *to_free = self->head; 
+void linked_list_free(linked_list *self) {
+  node *to_free = self->head;
   // free all nodes stored inside the linked list
-  while((to_free = _free_node(to_free)) != NULL);
+  while ((to_free = _node_free(to_free)) != NULL)
+    ;
 
   free(self);
   self = NULL;
 }
 
-node *linked_list_append(linked_list *self, int value){
-  node *new = _node_new(value);
-  new->next = NULL;
+node *linked_list_append(linked_list *self, int value) {
+  return linked_list_insert(self, self->length, value);
+}
 
-  if(self->head == NULL){
+node *linked_list_insert(linked_list *self, int index, int value) {
+  if (self->length < index) {
+    printf("Error, accessing memory out of bounds\nMaximum %d, accessing %d\n",
+           self->length, index);
+    exit(1);
+  }
+  node *new = _node_new(value);
+  new->data = value;
+  node *prev;
+  if (index == 0)
+    prev = self->head;
+  else
+    prev = _node_get(self, index - 1);
+  // this should be the case when there is yet a node (aka, insert to head)
+  if (prev == NULL) {
+    new->next = NULL;
     self->head = new;
     self->tail = new;
     self->length++;
+    return new;
   }
-
-  
+  // insert to tail
+  if (prev == self->tail) {
+    new->next = NULL;
+    self->tail->next = new;
+    self->tail = new;
+    self->length++;
+    return new;
+  }
+  // insert in the middle
+  new->next = prev->next;
+  prev->next = new;
+  self->length++;
   return new;
+}
+
+int linked_list_remove(linked_list *self, int index) {
+  if (self->length <= index) {
+    printf("Error, accessing memory out of bounds\nMaximum %d, accessing %d\n",
+           self->length - 1, index);
+    exit(1);
+  }
+  node *rm = _node_get(self, index);
+  int ret = rm->data;
+  free(rm);
+  rm = NULL;
+  self->length--;
+  return ret;
+}
+
+int linked_list_get_value(linked_list *self, int index) {
+  return _node_get(self, index)->data;
+}
+
+void linked_list_print(linked_list *self) {
+  node *curr = self->head;
+  printf("The linked list is as follow:\n");
+  while (curr != NULL) {
+    printf("%d->", curr->data);
+    curr = curr->next;
+  }
+  printf("NULL\n");
 }

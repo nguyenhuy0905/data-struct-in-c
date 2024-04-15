@@ -1,5 +1,5 @@
-#ifndef _LINKED_LIST_H_
-#define _LINKED_LIST_H_
+#ifndef _DATASTRUCT_IN_C_LINKED_LIST_H_
+#define _DATASTRUCT_IN_C_LINKED_LIST_H_
 
 /**
  * @typedef _linked_list
@@ -30,10 +30,16 @@ void linked_list_free(linked_list *self);
 
 node *linked_list_append(linked_list *self, int value);
 
-node *linked_list_insert(linked_list *self, int value, int position);
+node *linked_list_insert(linked_list *self, int position, int value);
 
-int linked_list_remove(linked_list *self, node index);
+int linked_list_remove(linked_list *self, int index);
 
 unsigned int linked_list_get_length(linked_list *self);
+
+int linked_list_get_value(linked_list *self, int index);
+
+node *linked_list_set_value(linked_list *self, int index, int value);
+
+void linked_list_print(linked_list *self);
 
 #endif // _LINKED_LIST_H_
