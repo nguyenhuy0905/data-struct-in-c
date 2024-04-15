@@ -5,7 +5,8 @@
 difficult? To be fair, I think C is actually simpler.
 
 ### NOTE:
-- Caching nightmare ahead. Especially the linked list. It literally just stores pointers to something on the heap.
+- The data structures ONLY stores integers. This is to ensure caching is working properly. 
+- I may be overly wary about performance though.
 
 ### What have you written?
 - Linked list.
@@ -21,3 +22,12 @@ difficult? To be fair, I think C is actually simpler.
 
 ### NOTE
 - Second attempt, after I have learned, stuff.
+---
+### PLANS
+- [ ] Implement linked list **on the way**
+- [ ] Implement stack and queue
+- [ ] Implement binary tree
+- [ ] Implement AVL tree
+- [ ] Implement red-black tree (not guaranteed I would do though)
+- [ ] Implement a simple hash map
+- [ ] Implement graph
