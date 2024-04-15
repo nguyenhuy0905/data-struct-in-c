@@ -7,6 +7,7 @@ difficult? To be fair, I think C is actually simpler.
 ### NOTE:
 - The data structures ONLY stores integers. This is to ensure caching is working properly. 
 - I may be overly wary about performance though.
+- After pulling the commit down, create a directory called `lib`
 
 ### What have you written?
 - Linked list.
