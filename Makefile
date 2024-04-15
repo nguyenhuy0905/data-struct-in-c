@@ -22,7 +22,20 @@ check:
 	@echo $(SRCS)
 	@echo $(LIBS)
 
+.PHONY: test
+
+TEST ?= linked-list
+
+test:
+	cd ./test/ && make -f MakeTest.mk 
+
 .PHONY: setup
 
 setup:
 	mkdir -p bin bin/obj lib
+
+.PHONY: clean
+
+clean:
+	rm -f $(wildcard ./lib/*)
+	cd ./test/ && make -f MakeTest.mk clean
