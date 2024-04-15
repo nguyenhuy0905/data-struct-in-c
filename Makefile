@@ -21,3 +21,8 @@ $(LIBS): ./lib/lib%.so: ./src/%.c
 check:
 	@echo $(SRCS)
 	@echo $(LIBS)
+
+.PHONY: setup
+
+setup:
+	mkdir -p bin bin/obj lib
