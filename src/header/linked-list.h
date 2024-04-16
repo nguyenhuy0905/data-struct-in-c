@@ -42,4 +42,10 @@ node *linked_list_set_value(linked_list *self, unsigned int index, int value);
 
 void linked_list_print(linked_list *self);
 
+void linked_list_start_iteration(linked_list *self);
+
+int linked_list_iteraton_next(linked_list *self);
+
+void linked_list_end_iteration(linked_list *self);
+
 #endif // _LINKED_LIST_H_
