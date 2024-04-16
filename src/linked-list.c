@@ -2,6 +2,7 @@
 #include "header/err-handler.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 /* private. Client code only has access to the struct linked_list
  * and none of these instance variables*/
@@ -43,22 +44,30 @@ node *_node_new(int data) {
   node *new = (node *)malloc(sizeof(node));
 
   if (new == NULL) {
-    printf("Error: memory allocation error. Maybe you ran out of memory?\n");
+    printf("\n\033[31mMemory allocation error. Maybe you ran out of memory?\n\n");
+    errno = ENOMEM;
     DIAGNOSTIC_INFO(__func__);
     exit(1);
   }
   return new;
 }
 
-node *_node_get(linked_list *self, int index) {
-  if (self->length <= index) {
-    printf("Error, accessing memory out of bounds\nMaximum %d, accessing index %d\n",
+node *_node_get(linked_list *self, unsigned int index) {
+  if (self->length <= index || index < 0) {
+    printf("\n\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, accessing index %d\n\n",
            self->length - 1, index);
+    errno = ERANGE;
     DIAGNOSTIC_INFO(__func__);
     exit(1);
   }
   node *ret = self->head;
   while (index > 0) {
+    if(ret == NULL){
+      printf("\n\033[31mNull pointer\nAt index %d\n\n", index);
+      errno = ERANGE;
+      DIAGNOSTIC_INFO(__func__);
+      exit(1);
+    }
     ret = ret->next;
     index--;
   }
@@ -82,7 +91,8 @@ linked_list *linked_list_new() {
   linked_list *new = (linked_list *)malloc(sizeof(linked_list));
   // this should never happen unless you have no big enough memory chunk left
   if (new == NULL) {
-    printf("Error: memory allocation error. Maybe you ran out of memory?\n");
+    printf("\n\033[31mMemory allocation error. Maybe you ran out of memory?\n\n");
+    errno = ENOMEM;
     DIAGNOSTIC_INFO(__func__);
     linked_list_free(new);
     exit(1);
@@ -111,10 +121,11 @@ node *linked_list_append(linked_list *self, int value) {
   return linked_list_insert(self, self->length, value);
 }
 
-node *linked_list_insert(linked_list *self, int index, int value) {
-  if (self->length < index) {
-    printf("Error, accessing memory out of bounds\nMaximum %d, accessing %d\n",
+node *linked_list_insert(linked_list *self, unsigned int index, int value) {
+  if (self->length < index || index < 0) {
+    printf("\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, accessing %d\n\n",
            self->length, index);
+    errno = ERANGE;
     DIAGNOSTIC_INFO(__func__);
     linked_list_free(self);
     exit(1);
@@ -143,6 +154,7 @@ node *linked_list_insert(linked_list *self, int index, int value) {
     self->length++;
     return new;
   }
+  // insert to head when the list isn't empty
   if (prev == _before_head) {
     new->next = self->head;
     self->head = new;
@@ -156,10 +168,11 @@ node *linked_list_insert(linked_list *self, int index, int value) {
   return new;
 }
 
-int linked_list_remove(linked_list *self, int index) {
-  if (self->length <= index) {
-    printf("Error, accessing memory out of bounds\nMaximum %d, accessing %d\n",
+int linked_list_remove(linked_list *self, unsigned int index) {
+  if (self->length <= index || index < 0) {
+    printf("\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, accessing %d\n\n",
            self->length - 1, index);
+    errno = ERANGE;
     DIAGNOSTIC_INFO(__func__);
     linked_list_free(self);
     exit(1);
@@ -182,8 +195,12 @@ int linked_list_remove(linked_list *self, int index) {
   return ret;
 }
 
-int linked_list_get_value(linked_list *self, int index) {
+int linked_list_get_value(linked_list *self, unsigned int index) {
   return _node_get(self, index)->data;
+}
+
+unsigned int linked_list_get_length(linked_list *self){
+  return self->length;
 }
 
 void linked_list_print(linked_list *self) {
