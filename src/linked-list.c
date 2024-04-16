@@ -44,7 +44,7 @@ node *_node_new(int data) {
 
   if (new == NULL) {
     printf("Error: memory allocation error. Maybe you ran out of memory?\n");
-    DIAGNOSTIC_INFO;
+    DIAGNOSTIC_INFO(__func__);
     exit(1);
   }
   return new;
@@ -54,7 +54,7 @@ node *_node_get(linked_list *self, int index) {
   if (self->length <= index) {
     printf("Error, accessing memory out of bounds\nMaximum %d, accessing index %d\n",
            self->length - 1, index);
-    DIAGNOSTIC_INFO;
+    DIAGNOSTIC_INFO(__func__);
     exit(1);
   }
   node *ret = self->head;
@@ -83,7 +83,7 @@ linked_list *linked_list_new() {
   // this should never happen unless you have no big enough memory chunk left
   if (new == NULL) {
     printf("Error: memory allocation error. Maybe you ran out of memory?\n");
-    DIAGNOSTIC_INFO;
+    DIAGNOSTIC_INFO(__func__);
     linked_list_free(new);
     exit(1);
   }
@@ -115,7 +115,7 @@ node *linked_list_insert(linked_list *self, int index, int value) {
   if (self->length < index) {
     printf("Error, accessing memory out of bounds\nMaximum %d, accessing %d\n",
            self->length, index);
-    DIAGNOSTIC_INFO;
+    DIAGNOSTIC_INFO(__func__);
     linked_list_free(self);
     exit(1);
   }
@@ -160,7 +160,7 @@ int linked_list_remove(linked_list *self, int index) {
   if (self->length <= index) {
     printf("Error, accessing memory out of bounds\nMaximum %d, accessing %d\n",
            self->length - 1, index);
-    DIAGNOSTIC_INFO;
+    DIAGNOSTIC_INFO(__func__);
     linked_list_free(self);
     exit(1);
   }
