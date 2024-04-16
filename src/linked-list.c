@@ -95,6 +95,8 @@ void linked_list_free(linked_list *self) {
   // free all nodes stored inside the linked list
   while ((to_free = _node_free(to_free)) != NULL)
     ;
+  free(_before_head);
+  _before_head = NULL;
 
   free(self);
   self = NULL;
