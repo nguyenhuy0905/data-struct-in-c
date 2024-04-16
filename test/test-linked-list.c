@@ -22,8 +22,9 @@ void test_append_insert(linked_list *ll) {
   linked_list_append(ll, 16);
   linked_list_append(ll, 32);
   linked_list_insert(ll, 2, 24);
+  linked_list_insert(ll, 0, 4);
   linked_list_print(ll);
-  printf("Expected:\n8->16->24->32->NULL\n");
+  printf("Expected:\n4->8->16->24->32->NULL\n");
   printf("\n=====TEST APPEND AND INSERT=====\n\n");
 
   linked_list_free(ll);

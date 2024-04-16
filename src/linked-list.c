@@ -119,7 +119,7 @@ node *linked_list_insert(linked_list *self, int index, int value) {
   else
     prev = _node_get(self, index - 1);
   // this should be the case when there is yet a node (aka, insert to head)
-  if (prev == _before_head) {
+  if (prev == NULL) {
     new->next = NULL;
     self->head = new;
     self->tail = new;
@@ -131,6 +131,12 @@ node *linked_list_insert(linked_list *self, int index, int value) {
     new->next = NULL;
     self->tail->next = new;
     self->tail = new;
+    self->length++;
+    return new;
+  }
+  if (prev == _before_head) {
+    new->next = self->head;
+    self->head = new;
     self->length++;
     return new;
   }
