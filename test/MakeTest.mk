@@ -20,12 +20,12 @@ all: run
 run: $(BUILD_DIR)test-$(TEST)
 	@echo "===== TEST ====="
 	@echo ""
-	$^
+	$(BUILD_DIR)test-$(TEST)
 	@echo ""
 	@echo "===== TEST ====="
-	
+
 $(BUILD_DIR)test-$(TEST): ./test-$(TEST).c $(LIB_DIR)lib$(TEST).so
-	$(CC) -o $@ $< -L$(LIB_DIR) $(LIB_INCL) -rpath $(LIB_DIR)
+	$(CC) -o $@ $< -L$(LIB_DIR) $(LIB_INCL) -rpath $(LIB_DIR) $(MODE)
 
 $(LIB_DIR)lib$(TEST).so:
 	cd .. && make
@@ -43,5 +43,6 @@ check:
 
 clean:
 	rm -f $(TEST_OBJS) $(TEST_EXECS)
+	rm -f $(wildcard $(OBJ_DIR)*)
 
 

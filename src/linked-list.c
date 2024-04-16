@@ -17,6 +17,9 @@ struct _node {
   int data;
 };
 
+/* private static variables */
+static node *_before_head = NULL;
+
 /* private methods */
 
 /* node operations */
@@ -79,6 +82,9 @@ linked_list *linked_list_new() {
     printf("Error: memory allocation error. Maybe you ran out of memory?\n");
     exit(1);
   }
+  if (_before_head == NULL) {
+    _before_head = _node_new(0);
+  }
 
   _linked_list_init(new);
   return new;
@@ -104,15 +110,16 @@ node *linked_list_insert(linked_list *self, int index, int value) {
            self->length, index);
     exit(1);
   }
+  _before_head->next = self->head;
   node *new = _node_new(value);
   new->data = value;
   node *prev;
   if (index == 0)
-    prev = self->head;
+    prev = _before_head;
   else
     prev = _node_get(self, index - 1);
   // this should be the case when there is yet a node (aka, insert to head)
-  if (prev == NULL) {
+  if (prev == _before_head) {
     new->next = NULL;
     self->head = new;
     self->tail = new;
@@ -140,11 +147,21 @@ int linked_list_remove(linked_list *self, int index) {
            self->length - 1, index);
     exit(1);
   }
-  node *rm = _node_get(self, index);
-  int ret = rm->data;
-  free(rm);
-  rm = NULL;
+  _before_head->next = self->head;
+  node *rm_prev;
+  if (index == 0)
+    rm_prev = _before_head;
+  else
+    rm_prev = _node_get(self, index - 1);
+  int ret = rm_prev->next->data;
+  node *new_next = rm_prev->next->next;
+  free(rm_prev->next);
+  rm_prev->next = new_next;
+  if (rm_prev == _before_head)
+    self->head = rm_prev->next;
   self->length--;
+  if (self->length == 1)
+    self->tail = rm_prev->next;
   return ret;
 }
 
