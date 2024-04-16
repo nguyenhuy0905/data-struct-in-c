@@ -1,13 +1,13 @@
 #include "header/linked-list.h"
 #include "header/err-handler.h"
 #include <asm-generic/errno-base.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 
-typedef struct {
+struct _linked_list_iterator {
   node *next;
-} linked_list_iterator;
+};
 
 /* private. Client code only has access to the struct linked_list
  * and none of these instance variables*/
@@ -50,7 +50,8 @@ node *_node_new(int data) {
   node *new = (node *)malloc(sizeof(node));
 
   if (new == NULL) {
-    printf("\n\033[31mMemory allocation error. Maybe you ran out of memory?\n\n");
+    printf(
+        "\n\033[31mMemory allocation error. Maybe you ran out of memory?\n\n");
     errno = ENOMEM;
     DIAGNOSTIC_INFO(__func__);
     exit(1);
@@ -60,7 +61,8 @@ node *_node_new(int data) {
 
 node *_node_get(linked_list *self, unsigned int index) {
   if (self->length <= index || index < 0) {
-    printf("\n\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, accessing index %d\n\n",
+    printf("\n\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, "
+           "accessing index %d\n\n",
            self->length - 1, index);
     errno = ERANGE;
     DIAGNOSTIC_INFO(__func__);
@@ -68,7 +70,7 @@ node *_node_get(linked_list *self, unsigned int index) {
   }
   node *ret = self->head;
   while (index > 0) {
-    if(ret == NULL){
+    if (ret == NULL) {
       printf("\n\033[31mNull pointer\nAt index %d\n\n", index);
       errno = EFAULT;
       DIAGNOSTIC_INFO(__func__);
@@ -94,13 +96,26 @@ void _linked_list_init(linked_list *self) {
   self->iter = NULL;
 }
 
+void _linked_list_new_iterator(linked_list *self) {
+  self->iter = (linked_list_iterator *)malloc(sizeof(linked_list_iterator));
+  if (self->iter == NULL) {
+    printf(
+        "\n\033[31mMemory allocation error. Maybe you ran out of memory?\n\n");
+    errno = ENOMEM;
+    DIAGNOSTIC_INFO(__func__);
+    linked_list_free(self);
+    exit(1);
+  }
+}
+
 /**
  * @brief Check whether the linked list passed in is NULL
  *
  * @return the linked list if not null, or crash the program otherwise
  */
-linked_list *_check_null(linked_list *self, const char *func){
-  if(self != NULL) return self;
+linked_list *_check_null(linked_list *self, const char *func) {
+  if (self != NULL)
+    return self;
   printf("\n\033[31mNull pointer\n\n");
   errno = EFAULT;
   DIAGNOSTIC_INFO(func);
@@ -114,7 +129,8 @@ linked_list *linked_list_new() {
   linked_list *new = (linked_list *)malloc(sizeof(linked_list));
   // this should never happen unless you have no big enough memory chunk left
   if (new == NULL) {
-    printf("\n\033[31mMemory allocation error. Maybe you ran out of memory?\n\n");
+    printf(
+        "\n\033[31mMemory allocation error. Maybe you ran out of memory?\n\n");
     errno = ENOMEM;
     DIAGNOSTIC_INFO(__func__);
     linked_list_free(new);
@@ -149,7 +165,8 @@ node *linked_list_append(linked_list *self, int value) {
 node *linked_list_insert(linked_list *self, unsigned int index, int value) {
   _check_null(self, __func__);
   if (self->length < index || index < 0) {
-    printf("\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, accessing %d\n\n",
+    printf("\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, "
+           "accessing %d\n\n",
            self->length, index);
     errno = ERANGE;
     DIAGNOSTIC_INFO(__func__);
@@ -197,7 +214,8 @@ node *linked_list_insert(linked_list *self, unsigned int index, int value) {
 int linked_list_remove(linked_list *self, unsigned int index) {
   _check_null(self, __func__);
   if (self->length <= index || index < 0) {
-    printf("\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, accessing %d\n\n",
+    printf("\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, "
+           "accessing %d\n\n",
            self->length - 1, index);
     errno = ERANGE;
     DIAGNOSTIC_INFO(__func__);
@@ -227,7 +245,7 @@ int linked_list_get_value(linked_list *self, unsigned int index) {
   return _node_get(self, index)->data;
 }
 
-unsigned int linked_list_get_length(linked_list *self){
+unsigned int linked_list_get_length(linked_list *self) {
   _check_null(self, __func__);
   return self->length;
 }
@@ -243,22 +261,34 @@ void linked_list_print(linked_list *self) {
   printf("NULL\n");
 }
 
-int linked_list_iteraton_next(linked_list *self){
+linked_list_iterator *linked_list_start_iteration(linked_list *self) {
   _check_null(self, __func__);
-  return self->iter->next->data;
-}
-
-void linked_list_start_iteration(linked_list *self){
-  _check_null(self, __func__);
-  if(self->iter == NULL){
-    self->iter = (linked_list_iterator*)malloc(sizeof(linked_list_iterator));
-  }
+  _linked_list_new_iterator(self);
   self->iter->next = self->head;
+  return self->iter;
 }
 
-void linked_list_end_iteraton(linked_list *self){
+linked_list_iterator *linked_list_iteraton_next(linked_list *self, int *out) {
   _check_null(self, __func__);
-  if(self->iter == NULL)
+  if (self->iter == NULL) {
+    printf("\033[31mNull iterator\nEither iteration has ended or has yet to "
+           "start\n");
+    errno = EFAULT;
+    DIAGNOSTIC_INFO(__func__);
+    linked_list_free(self);
+    exit(1);
+  }
+  *out = self->iter->next->data;
+  self->iter->next = self->iter->next->next;
+  if (self->iter->next == NULL) {
+    linked_list_end_iteration(self);
+  }
+  return self->iter;
+}
+
+void linked_list_end_iteration(linked_list *self) {
+  _check_null(self, __func__);
+  if (self->iter == NULL)
     return;
   free(self->iter);
   self->iter = NULL;

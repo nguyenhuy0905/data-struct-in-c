@@ -18,6 +18,8 @@ typedef struct _linked_list linked_list;
  */
 typedef struct _node node;
 
+typedef struct _linked_list_iterator linked_list_iterator;
+
 /**
  * @brief Create a new instance of linked list
  */
@@ -28,6 +30,11 @@ linked_list *linked_list_new();
  */
 void linked_list_free(linked_list *self);
 
+/**
+ * @brief Add a value to the end of the list
+ *
+ * @return The newly created node inside the list
+ */
 node *linked_list_append(linked_list *self, int value);
 
 node *linked_list_insert(linked_list *self, unsigned int index, int value);
@@ -42,9 +49,9 @@ node *linked_list_set_value(linked_list *self, unsigned int index, int value);
 
 void linked_list_print(linked_list *self);
 
-void linked_list_start_iteration(linked_list *self);
+linked_list_iterator *linked_list_start_iteration(linked_list *self);
 
-int linked_list_iteraton_next(linked_list *self);
+linked_list_iterator *linked_list_iteraton_next(linked_list *self, int *out);
 
 void linked_list_end_iteration(linked_list *self);
 
