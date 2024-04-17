@@ -9,7 +9,7 @@
 typedef struct _linked_list linked_list;
 
 /**
- * @typedef _node
+ * @typedef _linked_listnode
  * @brief A node inside the linked list.
  * NEVER assign the node pointer to another linked list,
  * since all nodes in one linked list will be removed when
