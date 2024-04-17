@@ -45,7 +45,9 @@ node *_node_free(node *self) {
   return next;
 }
 
-/* @brief: utility function to create a new node */
+/* @brief Utility function to create a new node.
+ *
+ * @description: allocate memory for a node, throw ENOMEM if cannot allocate*/
 node *_node_new(int data) {
   node *new = (node *)malloc(sizeof(node));
 
@@ -59,6 +61,15 @@ node *_node_new(int data) {
   return new;
 }
 
+/**
+ * @brief Utility function to get the node at the specified index
+ *
+ * @param index: position of the node
+ *
+ * @description: (assuming self is not NULL since this is a private method),
+ * check whether index is within the range of the linked list, if not throw
+ * ERANGE. Then iterate the linked list until the specified index.
+ */
 node *_node_get(linked_list *self, unsigned int index) {
   if (self->length <= index || index < 0) {
     printf("\n\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, "
