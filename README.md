@@ -25,6 +25,14 @@ make test TEST=[data-structure-to-test]
 # so, to run a test on linked list, for example
 make test TEST=linked-list
 ```
+- If you want to debug with GDB:
+    - Ensure _all_ object files (including the libraries) are compiled with debug flags (by setting the `MODE` variable in the `Makefile` and `./test/MakeTest.mk` file to `--debug`)
+    - Compile and run a test executable first with the commands above
+    - Ensure you're at the directory of the `Makefile`
+    - Run the following:
+    ```
+    LD_LIBRARY_PATH=./lib/ gdb ./bin/[test-data-structure]
+    ```
 ### Writing a test file
 - To automate the process, please follow the following rules:
     - Put the test file inside the `test` directory
