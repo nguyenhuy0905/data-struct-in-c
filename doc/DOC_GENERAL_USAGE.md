@@ -11,4 +11,5 @@
     - Then, the first call of `linked_list_iteration_next` gives back the iterator if there's still data to loop through, and writes the first value to the variable passed in.
     - If you loop to the end, `linked_list_iteration_next` will terminate itself with `linked_list_end_iteration`.
     - But if you didn't, you should manually call `linked_list_end_iteration`.
-    - Do note that this means you can only loop through the collection once at a time.
+    - Do note that this means you can only loop through the collection once at a time using an iterator.
+    - Another way to loop is to simply access the indeces. This is not recommended for `linked-list`s due to performance reasons, but can be viable for data types with $O(1)$ random access time.
