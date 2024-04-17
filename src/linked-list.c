@@ -6,27 +6,27 @@
 #include <stdlib.h>
 
 struct _linked_list_iterator {
-  node *next;
+  linked_list_node *next;
 };
 
 /* private. Client code only has access to the struct linked_list
  * and none of these instance variables*/
 struct _linked_list {
-  node *head;
-  node *tail;
+  linked_list_node *head;
+  linked_list_node *tail;
   unsigned int length;
   linked_list_iterator *iter;
 };
 
 /* private. Client code only has access to the struct node
  * and none of these instance variables*/
-struct _node {
-  node *next;
+struct _linked_list_node {
+  linked_list_node *next;
   int data;
 };
 
 /* private static variables */
-static node *_before_head = NULL;
+static linked_list_node *_before_head = NULL;
 
 /* private methods */
 
@@ -37,8 +37,8 @@ static node *_before_head = NULL;
  * @param self
  * @return the next node to be removed, or NULL if all nodes have been removed
  */
-node *_node_free(node *self) {
-  node *next = self->next;
+linked_list_node *_node_free(linked_list_node *self) {
+  linked_list_node *next = self->next;
   free(self);
   // in case someone accidentally access the node after free
   self = NULL;
@@ -48,8 +48,8 @@ node *_node_free(node *self) {
 /* @brief Utility function to create a new node.
  *
  * @description: allocate memory for a node, throw ENOMEM if cannot allocate*/
-node *_node_new(int data) {
-  node *new = (node *)malloc(sizeof(node));
+linked_list_node *_node_new(int data) {
+  linked_list_node *new = (linked_list_node *)malloc(sizeof(linked_list_node));
 
   if (new == NULL) {
     printf(
@@ -70,7 +70,7 @@ node *_node_new(int data) {
  * check whether index is within the range of the linked list, if not throw
  * ERANGE. Then iterate the linked list until the specified index.
  */
-node *_node_get(linked_list *self, unsigned int index) {
+linked_list_node *_node_get(linked_list *self, unsigned int index) {
   if (self->length <= index || index < 0) {
     printf("\n\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, "
            "accessing index %d\n\n",
@@ -79,7 +79,7 @@ node *_node_get(linked_list *self, unsigned int index) {
     DIAGNOSTIC_INFO(__func__);
     exit(1);
   }
-  node *ret = self->head;
+  linked_list_node *ret = self->head;
   while (index > 0) {
     if (ret == NULL) {
       printf("\n\033[31mNull pointer\nAt index %d\n\n", index);
@@ -157,7 +157,7 @@ linked_list *linked_list_new() {
 
 void linked_list_free(linked_list *self) {
   _check_null(self, __func__);
-  node *to_free = self->head;
+  linked_list_node *to_free = self->head;
   // free all nodes stored inside the linked list
   while ((to_free = _node_free(to_free)) != NULL)
     ;
@@ -168,12 +168,12 @@ void linked_list_free(linked_list *self) {
   self = NULL;
 }
 
-node *linked_list_append(linked_list *self, int value) {
+linked_list_node *linked_list_append(linked_list *self, int value) {
   _check_null(self, __func__);
   return linked_list_insert(self, self->length, value);
 }
 
-node *linked_list_insert(linked_list *self, unsigned int index, int value) {
+linked_list_node *linked_list_insert(linked_list *self, unsigned int index, int value) {
   _check_null(self, __func__);
   if (self->length < index || index < 0) {
     printf("\033[31mAccessing memory out of bounds\nMinimum 0, maximum %d, "
@@ -185,9 +185,9 @@ node *linked_list_insert(linked_list *self, unsigned int index, int value) {
     exit(1);
   }
   _before_head->next = self->head;
-  node *new = _node_new(value);
+  linked_list_node *new = _node_new(value);
   new->data = value;
-  node *prev;
+  linked_list_node *prev;
   if (index == 0)
     prev = _before_head;
   else
@@ -234,13 +234,13 @@ int linked_list_remove(linked_list *self, unsigned int index) {
     exit(1);
   }
   _before_head->next = self->head;
-  node *rm_prev;
+  linked_list_node *rm_prev;
   if (index == 0)
     rm_prev = _before_head;
   else
     rm_prev = _node_get(self, index - 1);
   int ret = rm_prev->next->data;
-  node *new_next = rm_prev->next->next;
+  linked_list_node *new_next = rm_prev->next->next;
   free(rm_prev->next);
   rm_prev->next = new_next;
   if (rm_prev == _before_head)
@@ -263,7 +263,7 @@ unsigned int linked_list_get_length(linked_list *self) {
 
 void linked_list_print(linked_list *self) {
   _check_null(self, __func__);
-  node *curr = self->head;
+  linked_list_node *curr = self->head;
   printf("The linked list is as follow:\n");
   while (curr != NULL) {
     printf("%d->", curr->data);

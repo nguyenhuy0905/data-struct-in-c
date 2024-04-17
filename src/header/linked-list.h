@@ -16,7 +16,7 @@ typedef struct _linked_list linked_list;
  * calling linked_list_free()
  *
  */
-typedef struct _node node;
+typedef struct _linked_list_node linked_list_node;
 
 /**
  * @typedef _linked_list_iterator
@@ -40,7 +40,7 @@ void linked_list_free(linked_list *self);
  *
  * @return The newly created node inside the list
  */
-node *linked_list_append(linked_list *self, int value);
+linked_list_node *linked_list_append(linked_list *self, int value);
 
 /**
  * @brief Add a node to the position specified in the list
@@ -49,7 +49,7 @@ node *linked_list_append(linked_list *self, int value);
  * @param value: value to insert
  * @return The pointer to the newly created node inside the list
  */
-node *linked_list_insert(linked_list *self, unsigned int index, int value);
+linked_list_node *linked_list_insert(linked_list *self, unsigned int index, int value);
 
 /**
  * @brief Remove the node at the specified position in the list
@@ -78,7 +78,7 @@ int linked_list_get_value(linked_list *self, unsigned int index);
  * @param value: the new value at the specified position
  * @return The pointer to the node just modified
  */
-node *linked_list_set_value(linked_list *self, unsigned int index, int value);
+linked_list_node *linked_list_set_value(linked_list *self, unsigned int index, int value);
 
 /**
  * @brief Print out the order inside the list
