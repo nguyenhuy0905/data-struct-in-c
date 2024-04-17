@@ -25,14 +25,6 @@ make test TEST=[data-structure-to-test]
 # so, to run a test on linked list, for example
 make test TEST=linked-list
 ```
-- For now you can manually do like so:
-```
-# make sure you're at the directory of the Makefile
-# for example,
-clang -o ./bin/obj/libtest-linked-list.so -shared -fPIC --debug ./test/test-linked-list.c #you can add -O0 flag to prevent the compiler from doing sus
-clang -o ./bin/test -I./src/header/ -L./lib/ -L./bin/obj/ -llinked-list -ltest-linked-list --debug 
-LD_LIBRARY_PATH=./lib/:./bin/obj/ ./bin/test
-```
 ### Writing a test file
 - To automate the process, please follow the following rules:
     - Put the test file inside the `test` directory
