@@ -1,0 +1,18 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-c",
+      "-fPIC",
+      "-fms-extensions",
+      "-Wall",
+      "-Wno-microsoft-anon-tag",
+      "-o",
+      "build/obj/linked-list.o",
+      "src/linked-list.c"
+    ],
+    "directory": "/home/huynguyen/Code/c-and-cpp/ds-in-c-2",
+    "file": "/home/huynguyen/Code/c-and-cpp/ds-in-c-2/src/linked-list.c",
+    "output": "/home/huynguyen/Code/c-and-cpp/ds-in-c-2/build/obj/linked-list.o"
+  }
+]
