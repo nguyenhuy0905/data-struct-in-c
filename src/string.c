@@ -19,6 +19,14 @@ String *string_ctor() {
   return ret;
 }
 
+String *string_ctor_and_set(const char *text) {
+  String *ret = (String *)malloc(sizeof(String));
+  ret->klass = &string_class;
+  ret->text = strdup(text);
+  ret->length = strlen(text);
+  return ret;
+}
+
 String *is_String(Object *self) {
   if (self == NULL)
     return NULL;
@@ -30,6 +38,12 @@ String *is_String(Object *self) {
 }
 
 char *string_get_text(String *self) { return self->text; }
+
+void string_set_text(String *self, const char *text) {
+  self->text = (char *)realloc(self->text, strlen(text) + 1);
+  memcpy(self->text, text, strlen(text) + 1);
+  self->length = strlen(text);
+}
 
 void string_dtor(void *self) {
   // without this check, a segfault will be thrown

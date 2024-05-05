@@ -8,9 +8,9 @@ typedef struct String String;
 
 String *string_ctor();
 
-char *string_set_text(const char *text);
+void string_set_text(String *self, const char *text);
 
-String *string_ctor_and_set(char *text);
+String *string_ctor_and_set(const char *text);
 
 void string_dtor(void *self);
 
