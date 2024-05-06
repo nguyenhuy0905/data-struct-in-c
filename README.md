@@ -7,3 +7,5 @@
 ### Plans
 - [ ] Write documentation
 - [ ] Implement some more types as Object
+### Issues
+- [ ] Each of the nested arrays can be of a different type

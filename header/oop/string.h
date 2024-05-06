@@ -1,7 +1,6 @@
 #ifndef __DS_IN_C_STRING_H__
 #define __DS_IN_C_STRING_H__
 
-#include "class.h"
 #include "object.h"
 
 typedef struct String String;
@@ -19,5 +18,7 @@ int string_compare(void *self, void *another);
 String *is_String(Object *self);
 
 char *string_get_text(String *self);
+
+const Class *get_class_String();
 
 #endif // !__DS_IN_C_STRING_H__

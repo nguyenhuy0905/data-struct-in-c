@@ -9,7 +9,9 @@ struct String {
   char *text;
 };
 
-static const Class string_class = {};
+static const Class string_class = {
+  .free_obj = string_dtor,
+};
 
 String *string_ctor() {
   String *ret = (String *)malloc(sizeof(String));
@@ -36,6 +38,8 @@ String *is_String(Object *self) {
   }
   return NULL;
 }
+
+const Class *get_class_String() { return &string_class; }
 
 char *string_get_text(String *self) { return self->text; }
 
